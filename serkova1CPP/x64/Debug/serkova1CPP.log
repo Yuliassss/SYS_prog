@@ -1,0 +1,9 @@
+﻿  serkova1CPP.cpp
+C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova1\serkova1CPP\Message.h(38,8): warning C4099: Message: имя типа, ранее отображенное с помощью "class", теперь отображено с помощью "struct"
+  (компиляция исходного файла "serkova1CPP.cpp")
+      C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova1\serkova1CPP\Message.h(38,8):
+       см. объявление "Message"
+  
+  serkova1CPP.vcxproj -> C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova1\x64\Debug\serkova1CPP.exe
+  "pwsh.exe" не является внутренней или внешней
+  командой, исполняемой программой или пакетным файлом.

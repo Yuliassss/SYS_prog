@@ -1,0 +1,9 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="serkova1CPP/serkova1CPP.vcxproj" Id="e8b27582-f484-4717-883d-4ef622d99331" />
+  <Project Path="serkova1CSharp/serkova1CSharp.csproj" Id="d5bd0ecc-5411-4d90-93c7-d3a378d832e7" />
+</Solution>
