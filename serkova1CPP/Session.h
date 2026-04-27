@@ -1,81 +1,93 @@
 #pragma once
+
 #include "SysProgAPI.h"
+#include <queue>
+#include <mutex>
+#include <condition_variable>
+#include <fstream>
+
+using namespace std;
 
 enum MessageTypes
 {
-	MT_CLOSE,
-	//MT_DATA,
+    MT_CLOSE,
+    MT_DATA,
 };
 
 struct MessageHeader
 {
-	int messageType;
-	int size;
+    int messageType;
+    int size;
 };
 
 struct Message
 {
-	MessageHeader header = { 0 };
-	string data;
-	Message() = default;
-	Message(MessageTypes messageType, const string& data = "")
-		:data(data)
-	{
-		header = { messageType,  int(data.length()) };
-	}
+    MessageHeader header = { 0 };
+    wstring data;
+
+    Message() = default;
+
+    Message(MessageTypes messageType, const wstring& data = L"")
+        : data(data)
+    {
+        header = { messageType, (int)data.length() };
+    }
 };
 
 class Session
 {
-	queue<Message> messages;
-	CRITICAL_SECTION cs;
-	HANDLE hEvent;
+private:
+    queue<Message> messages;
+    mutex mtx;
+    condition_variable cv;
+    int sessionID;
+
 public:
-	int sessionID;
+    Session(int id) : sessionID(id) {}
 
-	Session(int sessionID)
-		:sessionID(sessionID)
-	{
-		InitializeCriticalSection(&cs);
-		hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-	}
+    void addMessage(Message& m)
+    {
+        lock_guard<mutex> lock(mtx);
+        messages.push(m);
+        cv.notify_one();
+    }
 
-	~Session()
-	{
-		DeleteCriticalSection(&cs);
-		CloseHandle(hEvent);
-	}
+    bool getMessage(Message& m)
+    {
+        unique_lock<mutex> lock(mtx);
+        cv.wait(lock, [this] { return !messages.empty(); });
 
-	void addMessage(Message& m)
-	{
-		EnterCriticalSection(&cs);
-		messages.push(m);
-		SetEvent(hEvent);
-		LeaveCriticalSection(&cs);
-	}
+        if (!messages.empty())
+        {
+            m = messages.front();
+            messages.pop();
+            return true;
+        }
+        return false;
+    }
 
-	bool getMessage(Message& m)
-	{
-		bool res = false;
-		WaitForSingleObject(hEvent, INFINITE);
-		EnterCriticalSection(&cs);
-		if (!messages.empty())
-		{
-			res = true;
-			m = messages.front();
-			messages.pop();
-		}
-		if (messages.empty())
-		{
-			ResetEvent(hEvent);
-		}
-		LeaveCriticalSection(&cs);
-		return res;
-	}
+    void addMessage(MessageTypes type, const wstring& data = L"")
+    {
+        Message m(type, data);
+        addMessage(m);
+    }
 
-	void addMessage(MessageTypes messageType, const string& data = "")
-	{
-		Message m(messageType, data);
-		addMessage(m);
-	}
+    void saveToFile(const wstring& text)
+    {
+        wstring filename = to_wstring(sessionID) + L".txt";
+
+        HANDLE hFile = CreateFileW(filename.c_str(), GENERIC_WRITE, FILE_SHARE_READ,
+            NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+        if (hFile != INVALID_HANDLE_VALUE)
+        {
+            SetFilePointer(hFile, 0, NULL, FILE_END);
+            DWORD written;
+            WriteFile(hFile, text.c_str(), (DWORD)(text.size() * sizeof(wchar_t)), &written, NULL);
+            WriteFile(hFile, L"\n", 2, &written, NULL);
+            CloseHandle(hFile);
+        }
+    }
+
+    int getID() const { return sessionID; }
 };

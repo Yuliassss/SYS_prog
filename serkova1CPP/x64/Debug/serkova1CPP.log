@@ -1,9 +1,12 @@
-﻿  serkova1CPP.cpp
-C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova1\serkova1CPP\Message.h(38,8): warning C4099: Message: имя типа, ранее отображенное с помощью "class", теперь отображено с помощью "struct"
-  (компиляция исходного файла "serkova1CPP.cpp")
-      C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova1\serkova1CPP\Message.h(38,8):
-       см. объявление "Message"
-  
+﻿C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova1\serkova1CPP\serkova1CPP.vcxproj.user(28,2): warning MSB4011: невозможно повторно импортировать "C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Microsoft\VC\v180\Microsoft.Cpp.Default.props". Он уже был импортирован в "C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova1\serkova1CPP\serkova1CPP.vcxproj (28,3)". Скорее всего это связано с ошибкой при написании кода сборки. Повторный импорт будет пропущен. 
+C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova1\serkova1CPP\serkova1CPP.vcxproj.user(55,2): warning MSB4011: невозможно повторно импортировать "C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Microsoft\VC\v180\Microsoft.Cpp.props". Он уже был импортирован в "C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova1\serkova1CPP\serkova1CPP.vcxproj (55,3)". Скорее всего это связано с ошибкой при написании кода сборки. Повторный импорт будет пропущен. 
+C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova1\serkova1CPP\serkova1CPP.vcxproj.user(67,3): warning MSB4011: невозможно повторно импортировать "C:\Users\Yulia\AppData\Local\Microsoft\MSBuild\v4.0\Microsoft.Cpp.x64.user.props". Он уже был импортирован в "C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova1\serkova1CPP\serkova1CPP.vcxproj (67,5)". Скорее всего это связано с ошибкой при написании кода сборки. Повторный импорт будет пропущен. 
+C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova1\serkova1CPP\serkova1CPP.vcxproj.user(144,2): warning MSB4011: невозможно повторно импортировать "C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Microsoft\VC\v180\Microsoft.Cpp.targets". Он уже был импортирован в "C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova1\serkova1CPP\serkova1CPP.vcxproj (142,3)". Скорее всего это связано с ошибкой при написании кода сборки. Повторный импорт будет пропущен. 
+C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Microsoft\VC\v180\Microsoft.CppBuild.targets(1142,5): warning MSB8027: два или более файлов с именем serkova1CPP.cpp выводят результаты в одно и то же расположение. Это может стать причиной неверного результата сборки.  Включенные файлы — serkova1CPP.cpp, serkova1CPP.cpp.
+  serkova1CPP.cpp
+  serkova1CPP.cpp
+  Создание кода...
+x64\Debug\serkova1CPP.obj : warning LNK4042: объект указан более одного раза; лишние не учитываются
   serkova1CPP.vcxproj -> C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova1\x64\Debug\serkova1CPP.exe
   "pwsh.exe" не является внутренней или внешней
   командой, исполняемой программой или пакетным файлом.

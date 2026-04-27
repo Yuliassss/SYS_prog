@@ -1,59 +1,104 @@
 ﻿#include "SysProgAPI.h"
-#include "SRLocal.h"
+#include "Session.h"
 #include <vector>
-#include <utility>
+#include <thread>
 
 using namespace std;
 
-// Глобальные переменные для связи с C#
-vector<pair<Session*, HANDLE>> sessions;
+vector<Session*> sessions;
 int nextThreadId = 0;
 
 HANDLE hStartEvent;
+HANDLE hDataEvent;
 HANDLE hStopEvent;
 HANDLE hConfirmEvent;
 HANDLE hExitEvent;
 
-void start()
+struct header
 {
-    hStartEvent = CreateEvent(NULL, FALSE, FALSE, L"StartEvent");
-    hStopEvent = CreateEvent(NULL, FALSE, FALSE, L"StopEvent");
-    hConfirmEvent = CreateEvent(NULL, FALSE, FALSE, L"ConfirmEvent");
-    hExitEvent = CreateEvent(NULL, FALSE, FALSE, L"ExitEvent");
+    int addr;
+    int size;
+};
 
-    HANDLE hControlEvents[3] = { hStartEvent, hStopEvent, hExitEvent };
+// Обновленные объявления функций DLL
+extern "C" void MapSendMessage(int addr, const wchar_t* str);
+extern "C" void MapReceiveMessage(header* h, wchar_t* buffer, int bufferSize);
+
+void WorkerThread(Session* session)
+{
+    SafeWrite(L"session", session->getID(), L"created");
+
+    while (true)
+    {
+        Message msg;
+        if (session->getMessage(msg))
+        {
+            switch (msg.header.messageType)
+            {
+            case MT_CLOSE:
+                SafeWrite(L"session", session->getID(), L"closed");
+                delete session;
+                return;
+
+            case MT_DATA:
+                SafeWrite(L"session", session->getID(), L"received:", msg.data);
+                session->saveToFile(msg.data);
+                break;
+            }
+        }
+    }
+}
+
+void Start()
+{
+    hStartEvent = CreateEventW(NULL, FALSE, FALSE, L"StartEvent");
+    hDataEvent = CreateEventW(NULL, FALSE, FALSE, L"DataEvent");
+    hStopEvent = CreateEventW(NULL, FALSE, FALSE, L"StopEvent");
+    hConfirmEvent = CreateEventW(NULL, FALSE, FALSE, L"ConfirmEvent");
+    hExitEvent = CreateEventW(NULL, FALSE, FALSE, L"ExitEvent");
+
+    HANDLE events[4] = { hStartEvent, hDataEvent, hStopEvent, hExitEvent };
 
     SetEvent(hConfirmEvent);
-    SafeWrite("Console app started");
+    SafeWrite(L"Console app started");
 
-    do
+    while (true)
     {
-        int n = WaitForMultipleObjects(3, hControlEvents, FALSE, INFINITE) - WAIT_OBJECT_0;
+        int n = WaitForMultipleObjects(4, events, FALSE, INFINITE) - WAIT_OBJECT_0;
 
         switch (n)
         {
         case 0:
         {
-            int newId = nextThreadId++;
-
-             SRLocal::addThread(newId);
-
-           
-            SafeWrite("Thread created, ID:", newId, "total:", (int)SRLocal::sessions.size());
+            Session* newSession = new Session(nextThreadId++);
+            sessions.push_back(newSession);
+            thread t(WorkerThread, newSession);
+            t.detach();
             SetEvent(hConfirmEvent);
             break;
         }
 
         case 1:
         {
-            if (!SRLocal::sessions.empty())
+            header h;
+            wchar_t buffer[4096];
+            MapReceiveMessage(&h, buffer, 4096);
+            wstring text(buffer);
+
+            if (h.addr == -2)
             {
-                
-                int lastId = SRLocal::sessions.rbegin()->first;
-
-               Message::sendMessage(SRLocal(), lastId, MT_CLOSE);
-
-                SafeWrite("Thread terminated, ID:", lastId, "remaining:", (int)SRLocal::sessions.size() - 1);
+                SafeWrite(L"Main thread, broadcast:", text);
+                for (auto* s : sessions)
+                    s->addMessage(MT_DATA, text);
+            }
+            else if (h.addr == -1)
+            {
+                SafeWrite(L"Main thread, message:", text);
+            }
+            else
+            {
+                if (h.addr >= 0 && h.addr < (int)sessions.size())
+                    sessions[h.addr]->addMessage(MT_DATA, text);
             }
             SetEvent(hConfirmEvent);
             break;
@@ -61,30 +106,38 @@ void start()
 
         case 2:
         {
-            
-            for (auto& pair : SRLocal::sessions)
+            if (!sessions.empty())
             {
-                Message::sendMessage(SRLocal(), pair.first, MT_CLOSE);
+                sessions.back()->addMessage(MT_CLOSE);
+                sessions.pop_back();
             }
-
-            SRLocal::waitThreads();
-
             SetEvent(hConfirmEvent);
-            SafeWrite("Console app exiting");
+            break;
+        }
+
+        case 3:
+        {
+            for (auto* s : sessions)
+                delete s;
+            sessions.clear();
+            SetEvent(hConfirmEvent);
 
             CloseHandle(hStartEvent);
+            CloseHandle(hDataEvent);
             CloseHandle(hStopEvent);
             CloseHandle(hConfirmEvent);
             CloseHandle(hExitEvent);
 
+            SafeWrite(L"Console app exiting");
             return;
         }
         }
-    } while (true);
+    }
 }
 
 int main()
 {
-    start();
+    setlocale(LC_ALL, "rus");
+    Start();
     return 0;
 }

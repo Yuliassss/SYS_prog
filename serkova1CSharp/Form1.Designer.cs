@@ -12,6 +12,8 @@ namespace serkova1CSharp
         private NumericUpDown numericUpDown;
         private Button buttonStart;
         private Button buttonStop;
+        private TextBox textBox;
+        private Button buttonSend;
 
 
         protected override void Dispose(bool disposing)
@@ -83,11 +85,34 @@ namespace serkova1CSharp
             Controls.Add(listBox);
             MinimumSize = new Size(640, 480);
             Name = "Form1";
-            Text = "Серкова АС-23-05 ЛР1";
+            Text = "Серкова АС-23-05 ЛР2";
             FormClosed += Form1_FormClosed;
             ((System.ComponentModel.ISupportInitialize)numericUpDown).EndInit();
             ResumeLayout(false);
             PerformLayout();
+
+            // textBox
+            this.textBox = new TextBox();
+            this.textBox.Enabled = false;
+            this.textBox.Location = new Point(262, 12);
+            this.textBox.Name = "textBox";
+            this.textBox.Size = new Size(225, 27);
+            this.textBox.TabIndex = 4;
+
+            // buttonSend
+            this.buttonSend = new Button();
+            this.buttonSend.Enabled = false;
+            this.buttonSend.Location = new Point(393, 45);
+            this.buttonSend.Name = "buttonSend";
+            this.buttonSend.Size = new Size(94, 29);
+            this.buttonSend.TabIndex = 5;
+            this.buttonSend.Text = "Send";
+            this.buttonSend.UseVisualStyleBackColor = true;
+            this.buttonSend.Click += buttonSend_Click;
+
+            // Добавить элементы на форму (Controls.Add)
+            this.Controls.Add(this.buttonSend);
+            this.Controls.Add(this.textBox);
         }
     }
 }
