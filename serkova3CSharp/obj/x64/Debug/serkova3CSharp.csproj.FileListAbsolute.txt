@@ -1,0 +1,8 @@
+C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova3\serkova3CSharp\bin\x64\Debug\serkova3CSharp.exe
+C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova3\serkova3CSharp\bin\x64\Debug\serkova3CSharp.pdb
+C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova3\serkova3CSharp\obj\x64\Debug\serkova3CSharp.csproj.AssemblyReference.cache
+C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova3\serkova3CSharp\obj\x64\Debug\serkova3CSharp.Form1.resources
+C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova3\serkova3CSharp\obj\x64\Debug\serkova3CSharp.csproj.GenerateResource.cache
+C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova3\serkova3CSharp\obj\x64\Debug\serkova3CSharp.csproj.CoreCompileInputs.cache
+C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova3\serkova3CSharp\obj\x64\Debug\serkova3CSharp.exe
+C:\Users\Yulia\Desktop\AC-23-05\6 семестр\системное программирование\serkova3\serkova3CSharp\obj\x64\Debug\serkova3CSharp.pdb

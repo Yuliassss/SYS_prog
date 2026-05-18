@@ -1,0 +1,14 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="serkova3DLL/serkova3DLL.vcxproj" Id="a1b2c3d4-0001-4000-8000-000000000001" />
+  <Project Path="serkova3Server/serkova3Server.vcxproj" Id="a1b2c3d4-0002-4000-8000-000000000002">
+    <BuildDependency Project="serkova3DLL/serkova3DLL.vcxproj" />
+  </Project>
+  <Project Path="serkova3CSharp/serkova3CSharp.csproj" Id="a1b2c3d4-0003-4000-8000-000000000003">
+    <BuildDependency Project="serkova3DLL/serkova3DLL.vcxproj" />
+    <Platform Solution="Debug|x64" Project="x64" />
+    <Platform Solution="Release|x64" Project="x64" />
+  </Project>
+</Solution>
